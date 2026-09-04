@@ -453,30 +453,75 @@ String pageHeader(const char* title, const char* ver, bool refresh) {
   if (refresh) h += "<meta http-equiv='refresh' content='5'>";
   h += "<title>";
   h += title;
-  h += "</title><style>body{font-family:system-ui,sans-serif;background:#0f1220;color:#d8e0f0;margin:0;padding:16px}";
-  h += "h1{font-size:20px;color:#7ee787}.dim{color:#8b93a8;font-size:12px}.cards{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}";
-  h += ".card{background:#1a1f33;border-radius:10px;padding:10px 16px;min-width:80px}.card b{display:block;font-size:20px;color:#ffd166}";
-  h += ".card span{font-size:11px;color:#8b93a8}table{width:100%;border-collapse:collapse;font-size:13px;background:#141828;border-radius:10px;overflow:hidden}";
-  h += "th{background:#202642;color:#9aa7c7;text-align:left;padding:6px 10px;font-weight:600}td{padding:6px 10px;border-top:1px solid #1f2440}tr:hover td{background:#1a2035}";
-  h += ".rssi-good{color:#7ee787}.rssi-mid{color:#ffd166}.rssi-bad{color:#ff7b72}.stranger{color:#ff7b72;font-weight:600}.rogue{color:#ff7b72;font-weight:700}";
-  h += ".ops{background:#1a1f33;border-radius:10px;padding:10px 16px;margin:12px 0;font-size:13px}.ops a{color:#a5b4fc;text-decoration:none;margin-right:14px;white-space:nowrap}.ops a:hover{color:#7ee787}";
-  h += ".alert{background:#3d1a1a;border:1px solid #ff7b72;color:#ffb3ad;border-radius:10px;padding:10px 16px;margin:12px 0;font-size:14px}";
-  h += ".ok{background:#12321d;border:1px solid #3fb950;color:#a5e0b5;border-radius:10px;padding:10px 16px;margin:12px 0;font-size:14px}";
-  h += "h2{font-size:15px;margin:18px 0 8px;color:#a5b4fc}input,button,select{padding:6px;border:1px solid #2a3050;border-radius:6px;background:#0f1220;color:#d8e0f0}button{background:#2ea043;border:0;color:#fff;cursor:pointer;margin:2px}";
-  h += "canvas{background:#141828;border-radius:10px;width:100%;height:120px}</style></head><body><h1>";
-  h += ver;
-  h += "</h1><div class='dim'>" + String(title) + " · ESP32-C3 MAC " + WiFi.macAddress() + "</div>";
+  h += "</title><style>";
+  h += ":root{--bg:#0b0e17;--panel:#12182b;--panel2:#1a2238;--line:#273050;--txt:#dbe4f5;--dim:#7e8aa8;--acc:#34d399;--acc2:#0ea5e9;--blue:#93b4f8;--yellow:#ffd166;--red:#ff7b72}";
+  h += "*{box-sizing:border-box}body{margin:0;font-family:system-ui,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:radial-gradient(1200px 500px at 20% -10%,#141d3a 0%,var(--bg) 55%);color:var(--txt);min-height:100vh}";
+  h += ".wrap{max-width:1120px;margin:0 auto;padding:12px 14px 26px}";
+  h += ".top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:linear-gradient(135deg,#111a33,#0d1224);border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin-bottom:12px}";
+  h += ".logo{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#10b981,#0ea5e9);color:#04121c;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;letter-spacing:.5px;box-shadow:0 4px 14px rgba(16,185,129,.25)}";
+  h += ".ttl{font-size:17px;font-weight:800;letter-spacing:.3px}.ttl em{font-style:normal;color:var(--acc)}.sub{font-size:11px;color:var(--dim);margin-top:2px}";
+  h += ".sp{flex:1}.pill{font-size:11px;border:1px solid var(--line);border-radius:99px;padding:4px 10px;color:var(--dim);background:#0e1426;white-space:nowrap}";
+  h += ".pill.ok{color:#9ff0cd;border-color:#1c5c43;background:#0e241b}.pill.warn{color:#ffe1a0;border-color:#6b4d14;background:#241c0c}";
+  h += "nav.tabs{display:flex;flex-wrap:wrap;gap:5px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:7px;margin-bottom:14px}";
+  h += "nav.tabs a{display:block;padding:7px 13px;border-radius:9px;color:var(--dim);text-decoration:none;font-size:13px;font-weight:600;border:1px solid transparent}";
+  h += "nav.tabs a:hover{color:#fff;background:var(--panel2)}nav.tabs a.on{color:#04120c;background:var(--acc)}";
+  h += ".pagepanel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:16px;box-shadow:0 6px 24px rgba(0,0,0,.22)}";
+  h += "section.panel{background:#0e1426;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 16px}";
+  h += "h2{font-size:15px;margin:20px 0 12px;color:var(--blue);display:flex;align-items:center;gap:8px;letter-spacing:.3px}h2::before{content:'';width:4px;height:16px;border-radius:2px;background:linear-gradient(180deg,var(--acc),var(--acc2));display:inline-block;flex:none}";
+  h += ".grid,.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px;margin-bottom:14px}";
+  h += ".stat,.card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}.stat b,.card b{display:block;font-size:22px;font-variant-numeric:tabular-nums;color:#fff;line-height:1.25}.stat span,.card span{font-size:11px;color:var(--dim)}";
+  h += ".alert,.ok{border-radius:12px;padding:10px 14px;margin:0 0 14px;font-size:13px;border:1px solid}.alert{background:rgba(255,123,114,.08);border-color:rgba(255,123,114,.45);color:#ffb4ae;border-left:4px solid var(--red)}.ok{background:rgba(52,211,153,.07);border-color:rgba(52,211,153,.4);color:#a7f3d4;border-left:4px solid var(--acc)}";
+  h += ".ops{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--dim)}.ops .lbl{font-weight:700;color:var(--txt);margin-right:4px}";
+  h += "table{width:100%;border-collapse:collapse;font-size:13px;background:#0f1526;border-radius:12px;overflow:hidden;border:1px solid var(--line)}";
+  h += "th{background:#1c2440;color:#9fb0d8;text-align:left;padding:9px 11px;font-weight:700;white-space:nowrap;border-bottom:1px solid var(--line)}td{padding:8px 11px;border-top:1px solid #1c2440;vertical-align:middle}tr:hover td{background:#182036}";
+  h += ".badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}.b-red{background:rgba(255,123,114,.15);color:#ff8f88}.b-green{background:rgba(52,211,153,.15);color:#6ee7b7}.b-yellow{background:rgba(255,209,102,.15);color:#ffd166}.b-blue{background:rgba(147,184,248,.15);color:#93b4f8}.b-dim{background:rgba(126,138,168,.15);color:#9aa5c0}";
+  h += ".rssi-good{color:#6ee7b7}.rssi-mid{color:#ffd166}.rssi-bad{color:#ff7b72}.stranger{color:#ff9d95;font-weight:700}.rogue{color:#ff7b72;font-weight:800}";
+  h += ".dim{color:var(--dim);font-size:12px}.mono{font-family:Consolas,Menlo,monospace;font-size:12px}";
+  h += ".btn{display:inline-block;padding:7px 15px;border-radius:9px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;border:0;color:#04120c;background:linear-gradient(135deg,#34d399,#0ea5e9);box-shadow:0 3px 10px rgba(16,185,129,.2)}";
+  h += ".btn:hover{filter:brightness(1.1)}.btn.sec{background:#2b3452;color:#c9d4ef;box-shadow:none}.btn.danger{background:linear-gradient(135deg,#f87171,#dc2626);color:#fff}";
+  h += "input,select,textarea{padding:7px 10px;border:1px solid #33406b;border-radius:9px;background:#0d1326;color:var(--txt);font-size:13px}input:focus{outline:none;border-color:var(--acc2)}button{font-family:inherit}";
+  h += "form.inline{display:inline}.frow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0}label{font-size:12px;color:var(--dim)}";
+  h += "canvas{background:#0f1526;border-radius:12px;width:100%;height:140px;border:1px solid var(--line);margin-top:4px}";
+  h += ".foot{text-align:center;color:#59658a;font-size:11px;margin-top:10px;line-height:1.9}.foot a{color:#7f93c9;text-decoration:none;margin:0 6px}";
+  h += "@media(max-width:640px){.wrap{padding:8px}.ttl{font-size:15px}.stat b,.card b{font-size:19px}.top{padding:10px 12px}}";
+  h += "</style></head><body><div class='wrap'>";
+  h += "<header class='top'><div class='logo'>C3</div><div><div class='ttl'>ESP32-C3 <em>Sniffer</em> " + String(ver) + "</div><div class='sub'>无线嗅探 · 信道体检 · 安全巡检 · 事件告警</div></div><div class='sp'></div>";
+  if (WiFi.status()==WL_CONNECTED) h += "<span class='pill ok'>局域网 http://" + WiFi.localIP().toString() + "</span>";
+  h += "<span class='pill'>热点 192.168.4.1</span></header>";
+  String cur="";
+  String t=String(title);
+  if (t=="实时状态") cur="/";
+  else if (t=="信任与防钓鱼") cur="/protect";
+  else if (t=="设备命名（白名单）") cur="/names";
+  else if (t=="事件时间线") cur="/events";
+  else if (t=="信道体检") cur="/survey";
+  else if (t=="体检报告") cur="/report";
+  else if (t.indexOf("Webhook")>=0) cur="/hook";
+  else if (t=="局域网配网") cur="/config";
+  auto oncls=[&](const char* p){ return String(cur==p?"on":""); };
+  h += "<nav class='tabs'><a href='/' class='"+oncls("/")+"'>状态</a>";
+  h += "<a href='/protect' class='"+oncls("/protect")+"'>防钓鱼</a>";
+  h += "<a href='/names' class='"+oncls("/names")+"'>设备命名</a>";
+  h += "<a href='/events' class='"+oncls("/events")+"'>事件</a>";
+  h += "<a href='/survey' class='"+oncls("/survey")+"'>信道体检</a>";
+  h += "<a href='/report' class='"+oncls("/report")+"'>体检报告</a>";
+  h += "<a href='/hook' class='"+oncls("/hook")+"'>Webhook</a>";
+  h += "<a href='/config' class='"+oncls("/config")+"'>配网</a></nav><main><div class='pagepanel'>";
   return h;
 }
 String pageOps() {
-  String o = "<div class='ops'><b>入口:</b> AP <span class='dim'>http://192.168.4.1</span>";
-  if (WiFi.status()==WL_CONNECTED) o += " | 局域网 <span class='dim'>http://" + WiFi.localIP().toString() + "</span>";
-  o += "<br><b>操作:</b> <a href='/'>状态</a><a href='/protect'>信任/防钓鱼</a><a href='/events'>事件</a><a href='/survey'>信道体检</a><a href='/report'>体检报告</a><a href='/names'>设备命名</a><a href='/config'>配网</a>";
-  o += "<a href='/api/stats'>API:stats</a><a href='/api/aps'>aps</a><a href='/metrics'>metrics</a><a href='/dump'>pcap</a>";
-  o += "<br><b>抓包:</b> <a href='/set?ch=0'>自动轮换信道</a>";
-  o += "<a href='/survey?start=1'>开始信道体检</a>";
-  o += activeScan ? "<a href='/scan?on=0'>关主动扫描</a>" : "<a href='/scan?on=1'>开主动扫描</a>";
+  String o = "<div class='ops'><span class='lbl'>快捷操作</span>";
+  o += "<a class='btn' href='/survey?start=1'>开始信道体检</a>";
+  o += autoHop ? "<a class='btn sec' href='/set?ch=0'>信道自动轮换中</a>" : "<a class='btn sec' href='/set?ch=0'>自动轮换信道</a>";
+  o += activeScan ? "<a class='btn sec' href='/scan?on=0'>关闭主动扫描</a>" : "<a class='btn sec' href='/scan?on=1'>开启主动扫描</a>";
+  o += "<span style='flex:1'></span><span>当前信道 CH"+String(curChannel)+" · 收包 "+String((unsigned long)totalPackets)+"</span>";
   return o + "</div>";
+}
+String pageFoot() {
+  String f = "</div></main><div class='foot'>ESP32-C3 Sniffer v2.2 · MAC " + WiFi.macAddress() + " · 运行 " + String((unsigned long)(millis()/60000)) + " 分钟<br>";
+  f += "REST API: <a href='/api/stats'>stats</a> <a href='/api/aps'>aps</a> <a href='/api/devs'>devs</a> <a href='/api/events'>events</a> <a href='/api/survey'>survey</a> <a href='/api/topo'>topo</a> <a href='/api/hist'>hist</a> <a href='/api/metrics'>metrics</a> · <a href='/dump'>pcap 导出</a>";
+  f += "</div></body></html>";
+  return f;
 }
 
 String jsonEscape(String s) {
@@ -518,9 +563,9 @@ String buildHTML() {
   html += pageOps();
 
   // 实时速率图
-  html += "<h2>收包速率（pps，最近 60 秒）</h2><canvas id='cv'></canvas>";
+  html += "<section class='panel'><h2>收包速率（pps，最近 60 秒）</h2><canvas id='cv'></canvas></section>";
 
-  html += "<h2>附近 WiFi（AP）</h2><table><tr><th>SSID</th><th>加密</th><th>厂商</th><th>BSSID</th><th>信道</th><th>信号</th><th>包</th><th>状态</th></tr>";
+  html += "<section class='panel'><h2>附近 WiFi（AP）</h2><table><tr><th>SSID</th><th>加密</th><th>厂商</th><th>BSSID</th><th>信道</th><th>信号</th><th>包</th><th>状态</th></tr>";
   for (size_t i=0;i<aps.size();i++) {
     String s=String(aps[i].ssid); if(s.length()==0)s="(隐藏)";
     html += "<tr><td>"+s+"</td><td>"+encBadge(aps[i].enc)+"</td><td class='dim'>"+String(aps[i].oui)+"</td><td class='dim'>"+macStr(aps[i].bssid)+"</td><td>"+String(aps[i].channel)+"</td><td class='";
@@ -531,9 +576,9 @@ String buildHTML() {
     else html += "<span class='rssi-good'>正常</span>";
     html += "</td></tr>";
   }
-  html += "</table>";
+  html += "</table></section>";
 
-  html += "<h2>活跃设备（关联拓扑）</h2><table><tr><th>名称</th><th>MAC</th><th>厂商</th><th>信号</th><th>包</th><th>连接</th><th>探测</th><th>最近</th></tr>";
+  html += "<section class='panel'><h2>活跃设备（关联拓扑）</h2><table><tr><th>名称</th><th>MAC</th><th>厂商</th><th>信号</th><th>包</th><th>连接</th><th>探测</th><th>最近</th></tr>";
   for (size_t i=0;i<devs.size();i++) {
     String name=devName(devs[i].mac);
     uint32_t age=millis()-devs[i].lastSeen;
@@ -546,9 +591,9 @@ String buildHTML() {
     if (age<5000) html += "刚刚"; else if (age<30000) html += String(age/1000)+"秒前"; else html += String(age/60000)+"分钟前";
     html += "</td></tr>";
   }
-  html += "</table>";
+  html += "</table></section>";
   html += "<script>const cv=document.getElementById('cv'),ctx=cv.getContext('2d');async function draw(){try{const r=await fetch('/api/hist');const a=await r.json();cv.width=cv.clientWidth*2;cv.height=240;ctx.clearRect(0,0,cv.width,cv.height);const w=cv.width/a.length;const m=Math.max(...a,1);ctx.strokeStyle='#7ee787';ctx.beginPath();a.forEach((v,i)=>{const y=230-(v/m)*220;if(i)ctx.lineTo(i*w+w/2,y);else ctx.moveTo(i*w+w/2,y);});ctx.stroke();}catch(e){}}draw();setInterval(draw,2000);</script>";
-  html += "</body></html>";
+  html += pageFoot();
   return html;
 }
 
@@ -560,7 +605,8 @@ String eventsHTML() {
   for (size_t i=events.size(); i-- > 0;) {
     h += "<tr><td>"+String(evTypeName(events[i].type))+"</td><td class='dim'>"+String(events[i].tMs/1000)+"s</td><td class='dim'>"+String(events[i].mac)+"</td><td>"+String(events[i].desc)+"</td></tr>";
   }
-  h += "</table></body></html>";
+  h += "</table>";
+  h += pageFoot();
   return h;
 }
 
@@ -579,7 +625,8 @@ String protectHTML() {
   for (size_t i=0;i<aps.size();i++) {
     h += "<tr><td>"+String(aps[i].ssid)+"</td><td>"+macStr(aps[i].bssid)+"</td><td>"+encBadge(aps[i].enc)+"</td><td><a href='/trustone?ssid="+String(aps[i].ssid)+"&bssid="+macStr(aps[i].bssid)+"' style='color:#a5b4fc'>加入信任</a></td></tr>";
   }
-  h += "</table></body></html>";
+  h += "</table>";
+  h += pageFoot();
   return h;
 }
 void handleTrust() {
@@ -665,7 +712,9 @@ String surveyHTML() {
     const char* cls = (score<2000?"rssi-good":(score<6000?"rssi-mid":"rssi-bad"));
     h += "<tr><td>"+String(c)+"</td><td>"+String((unsigned long)survey[c].pkt)+"</td><td>"+String((unsigned long)survey[c].beacon)+"</td><td>"+String((unsigned long)survey[c].deauth)+"</td><td>"+String((int)survey[c].apCnt)+"</td><td class='"+cls+"'>"+String(score<2000?"空闲":(score<6000?"一般":"拥挤"))+"</td></tr>";
   }
-  h += "</table><p><a href='/survey?start=1' style='color:#a5b4fc'>立即开始体检</a></p></body></html>";
+  h += "</table>";
+  h += "<p style='margin-top:12px'><a class='btn' href='/survey?start=1'>立即开始体检</a></p>";
+  h += pageFoot();
   return h;
 }
 void handleSurvey() {
@@ -708,7 +757,8 @@ String reportHTML() {
   else h += "<li>✓ 所有设备已登记。</li>";
   if (String(getHook()).length()>0) h += "<li>✓ Webhook 已配置："+jsonEscape(getHook())+"</li>";
   else h += "<li>未配置 Webhook（可选 /hook 页）</li>";
-  h += "</ul></body></html>";
+  h += "</ul>";
+  h += pageFoot();
   return h;
 }
 String hookHTML() {
@@ -716,7 +766,8 @@ String hookHTML() {
   h += pageOps();
   h += "<h2>Webhook URL</h2><p class='dim'>事件（陌生人/deauth风暴/钓鱼AP/AP掉线）发生时 POST JSON 到该地址。需 STA 已连网；仅支持 http:// 80 端口。</p>";
   h += "<form method='GET' action='/hooksave'><input name='url' value='"+jsonEscape(getHook())+"' style='width:80%' placeholder='http://192.168.1.100:8080/hook'><button type='submit'>保存</button></form>";
-  h += "<p><a href='/hooktest'>发送测试事件</a></p></body></html>";
+  h += "<p style='margin-top:12px'><a class='btn sec' href='/hooktest'>发送测试事件</a></p>";
+  h += pageFoot();
   return h;
 }
 void handleHookSave() {
@@ -902,7 +953,8 @@ String namesHTML() {
     html += "</td><td><form method='GET' action='/name' style='display:inline'><input type='hidden' name='mac' value='"+m+"'><input type='text' name='name' placeholder='例如 老板手机' value='"+name+"' style='width:120px'><button type='submit'>保存</button></form> ";
     html += "<form method='GET' action='/name' style='display:inline'><input type='hidden' name='mac' value='"+m+"'><input type='hidden' name='name' value=''><button type='submit' style='background:#3b3f55'>清除</button></form></td></tr>";
   }
-  html += "</table></body></html>";
+  html += "</table>";
+  html += pageFoot();
   return html;
 }
 String configHTML() {
@@ -910,7 +962,8 @@ String configHTML() {
   html += "<p class='dim'>填写自家路由器 WiFi，板子连上后可通过局域网 IP 访问。当前已保存配置：</p>";
   html += "<form method='POST' action='/save'><label>WiFi 名称 (SSID)</label><br><input name='ssid' value='"+jsonEscape(prefs.getString("ssid",""))+"' style='width:90%'><br><br>";
   html += "<label>WiFi 密码（留空=不修改/开放网络）</label><br><input type='password' name='pass' style='width:90%'><br><br><button type='submit'>保存并连接</button></form>";
-  html += "<p class='dim'>清除配置改回纯热点：访问 /forget 后断电重启</p></body></html>";
+  html += "<p class='dim'>清除配置改回纯热点：访问 /forget 后断电重启</p>";
+  html += pageFoot();
   return html;
 }
 
