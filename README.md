@@ -13,6 +13,24 @@
 | v1 AP 版 | - | `releases/sniffer_c3_dio_40m_ap.merged.bin` | v1 + 内置 AP 热点 |
 | v2 (AP+LAN) | `firmware/v2_ap_lan/sniffer_c3_ap.ino` | `releases/sniffer_c3_ap_v2_lan.merged.bin` | 热点配网（Web 配网）+ 主动扫描 + 局域网 Web 控制台 |
 | v2.1 (Security) | `firmware/v21_security/sniffer_c3_v21.ino` | `releases/sniffer_c3_v21_security.merged.bin` | + 加密方式检测 + 设备命名/陌生人告警 + Deauth 风暴检测 |
+| v2.2 (Ops) | `firmware/v22_ops/sniffer_c3_v22.ino` | `releases/sniffer_c3_v22_ops.merged.bin` | 完整运维版：信道体检 + 非法/钓鱼 AP 检测 + OUI 厂商识别 + 关联拓扑 + 实时流量图表 + 事件时间线 + 设备清点比对 + Beacon 消失监控 + pcap 导出 + REST JSON API + Prometheus 指标 + Webhook 推送 |
+
+## v2.2 功能清单
+
+- **信道体检**：全信道 2.4G 占用扫描，按信道聚合 AP 数量/RSSI/流量，生成体检报告（HTML 与 JSON）
+- **非法/钓鱼 AP 检测**：SSID 匹配信任列表但 BSSID 不在白名单即标记 rogue，去重告警
+- **OUI 厂商识别**：内置常见 OUI 前缀表，自动识别 AP/设备的厂商
+- **设备命名与清点**：手动命名（持久化）、未命名设备陌生人告警、设备在线/掉线跟踪
+- **Beacon 消失监控**：信任 AP 超时未收到 Beacon 即产生离线事件
+- **Deauth 风暴检测**：单 MAC 每秒 Deauth 超阈值告警
+- **事件时间线**：环形缓冲事件记录（系统/陌生人/钓鱼/风暴/离线），网页与 JSON 均可查看
+- **关联拓扑**：通过关联帧/数据帧推断 STA-AP 关联关系，提供 /api/topo
+- **实时流量图表**：每秒收包速率环形历史（/api/hist），前端自动刷新图表
+- **pcap 导出**：按原始帧缓存（滚动环形缓冲），支持 /dump 流式下载 pcap 文件
+- **REST JSON API**：/api/stats、/api/aps、/api/devs、/api/events、/api/survey、/api/topo、/api/hist、/api/metrics
+- **Prometheus 指标**：/metrics 输出标准 Prometheus 文本格式
+- **Webhook 推送**：事件发生时 POST JSON 到自定义 URL（带去重与限流），支持测试按钮
+- **Web 控制台**：热点配网 + 局域网 Web 页面（状态/AP 列表/设备列表/事件/体检报告/配置）
 
 ## 技术栈
 
