@@ -13,7 +13,15 @@
 | v1 AP 版 | - | `releases/sniffer_c3_dio_40m_ap.merged.bin` | v1 + 内置 AP 热点 |
 | v2 (AP+LAN) | `firmware/v2_ap_lan/sniffer_c3_ap.ino` | `releases/sniffer_c3_ap_v2_lan.merged.bin` | 热点配网（Web 配网）+ 主动扫描 + 局域网 Web 控制台 |
 | v2.1 (Security) | `firmware/v21_security/sniffer_c3_v21.ino` | `releases/sniffer_c3_v21_security.merged.bin` | + 加密方式检测 + 设备命名/陌生人告警 + Deauth 风暴检测 |
+| v2.3 (Quality) | `firmware/v23_quality/sniffer_c3_v23.ino` | `releases/sniffer_c3_v23_ui.merged.bin` | + 信号打点采样与评级（均值/最差/最好/标准差/中断率/点位名）+ CSV 导出与历史比对 + 主动测速（STA 连被测 WiFi，TCP 握手延迟/丢包统计，测后自动恢复局域网） |
 | v2.2 (Ops) | `firmware/v22_ops/sniffer_c3_v22.ino` | `releases/sniffer_c3_v22_ops.merged.bin` | 完整运维版：信道体检 + 非法/钓鱼 AP 检测 + OUI 厂商识别 + 关联拓扑 + 实时流量图表 + 事件时间线 + 设备清点比对 + Beacon 消失监控 + pcap 导出 + REST JSON API + Prometheus 指标 + Webhook 推送 |
+
+## v2.3 信号质量功能
+
+- **信号打点**：指定 BSSID 采样指定秒数，输出均值/最差/最好 RSSI、标准差、中断率与评级（优/良/中/差/极差），可带点位名称，历史存 12 槽循环
+- **历史记录与 CSV**：/qpoints 查看全部打点（含距今时间、评级），一键导出 UTF-8 BOM CSV（时间,点位,BSSID,SSID,信道,样本,中断次数,均值,最差,最好,标准差,评级）
+- **主动测速**：板子切 STA 连接被测 WiFi（AP 热点 ESP32C3-Sniffer 全程保持），解析网关 IP 后对网关 80/443 端口 TCP 握手计时，统计平均延迟/丢包/当前 RSSI/信道，测试结束后自动恢复配网局域网 WiFi
+- **UI 改版**：统一顶部品牌栏 + Tabs 导航 + 卡片面板布局 + 统一页脚，全站 8 页面一致风格
 
 ## v2.2 功能清单
 
